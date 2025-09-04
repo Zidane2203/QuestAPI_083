@@ -1,4 +1,4 @@
-package com.example.questapi.uicontroller
+package com.example.questapi.uicontroller.route
 
 interface DestinasiNavigasi {
     val route: String
