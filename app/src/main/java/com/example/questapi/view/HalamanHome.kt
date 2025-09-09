@@ -28,7 +28,7 @@ import com.example.questapi.viewmodel.StatusUiSiswa
 @Composable
 fun HomeScreen(
     navigateToItemEntry: () -> Unit,
-//    navigateToItemUpdate: (Int) -> Unit,
+    navigateToItemUpdate: (Int) -> Unit,
     modifier: Modifier = Modifier,
     viewModel: HomeViewModel = viewModel(factory = PenyediaViewModel.Factory)
 ){
@@ -54,10 +54,10 @@ fun HomeScreen(
                 )
             }
         },
-    ) {
-        innerPadding ->
+    ) { innerPadding ->
         HomeBody(
             statusUiSiswa = viewModel.listSiswa,
+            onSiswaClick = navigateToItemUpdate,
             retryAction = viewModel::loadSiswa,
             modifier = modifier
                 .padding(innerPadding)
@@ -69,7 +69,7 @@ fun HomeScreen(
 @Composable
 fun HomeBody(
     statusUiSiswa : StatusUiSiswa,
-//    onSiswaClick: (DataSiswa) -> Unit,
+    onSiswaClick: (Int) -> Unit,
     modifier: Modifier = Modifier,
     retryAction: () -> Unit
 ){
@@ -79,8 +79,8 @@ fun HomeBody(
     ) {
         when(statusUiSiswa){
             is StatusUiSiswa.Loading -> LoadingScreen()
-            is StatusUiSiswa.Success -> DaftarSiswa(itemSiswa = statusUiSiswa.siswa)
-                //onSiswaClick = { onSiswaClick(it.id)})
+            is StatusUiSiswa.Success -> DaftarSiswa(itemSiswa = statusUiSiswa.siswa,
+                onSiswaClick = { onSiswaClick(it.id)})
             is StatusUiSiswa.Error -> ErrorScreen(
                 retryAction,
                 modifier = modifier.fillMaxSize()
@@ -115,7 +115,7 @@ fun ErrorScreen(retryAction: () -> Unit, modifier: Modifier = Modifier) {
 @Composable
 fun DaftarSiswa(
     itemSiswa : List<DataSiswa>,
-//    onSiswaClick: (DataSiswa) -> Unit,
+    onSiswaClick: (DataSiswa) -> Unit,
     modifier: Modifier = Modifier
 ){
     LazyColumn(modifier = modifier){
@@ -125,7 +125,7 @@ fun DaftarSiswa(
                 siswa = person,
                 modifier = Modifier
                     .padding(dimensionResource(id = R.dimen.padding_small))
-//                    .clickable { onSiswaClick(person) }
+                    .clickable { onSiswaClick(person) }
             )
         }
     }
